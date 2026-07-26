@@ -8,8 +8,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Arnil Etrade — Online Investing & Trading Platform" },
       { name: "description", content: "Open an Arnil Etrade brokerage account. Zero-commission stocks & ETFs, options, futures, and crypto with pro-grade tools." },
-      { property: "og:title", content: "Arnil Etrade — Online Investing & Trading" },
-      { property: "og:description", content: "Zero-commission stocks & ETFs, options, futures, and crypto with pro-grade tools." },
+      { property: "og:title", content: "Arnil Etrade — Online Investing & Trading Platform" },
+      { property: "og:description", content: "Open an Arnil Etrade brokerage account. Zero-commission stocks & ETFs, options, futures, and crypto with pro-grade tools." },
     ],
   }),
   component: Home,
