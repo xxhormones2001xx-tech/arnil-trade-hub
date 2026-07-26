@@ -22,6 +22,7 @@ const plans = [
     period: "one-time",
     tag: "Fast-track",
     icon: Zap,
+    cta: "Pay & register",
     features: [
       "Same-day account activation",
       "Priority KYC review",
@@ -35,6 +36,7 @@ const plans = [
     price: "$0",
     period: "per trade",
     tag: "Most popular",
+    cta: "Open account",
     features: ["Commission-free stocks & ETFs", "Fractional shares from $1", "Mobile & web platforms", "24/7 support"],
   },
   {
@@ -42,6 +44,7 @@ const plans = [
     price: "$0",
     period: "per trade",
     tag: "For frequent traders",
+    cta: "Open account",
     features: ["Everything in Standard", "$0.50 per options contract", "Advanced charts & Level 2", "Priority routing"],
     featured: true,
   },
@@ -50,6 +53,7 @@ const plans = [
     price: "0.25%",
     period: "per year",
     tag: "Managed portfolios",
+    cta: "Open account",
     features: ["Automated investing", "Tax-loss harvesting", "Human advisor access", "No account minimum"],
   },
 ];
@@ -76,7 +80,13 @@ function Pricing() {
                   </li>
                 ))}
               </ul>
-              <Link to="/open-account" className={`mt-8 block rounded-md px-6 py-3 text-center font-semibold ${p.featured ? "bg-brand text-ink hover:bg-brand/90" : "bg-ink text-background hover:bg-ink/85"}`}>Get started</Link>
+              <Link
+                to="/open-account"
+                search={{ plan: p.name }}
+                className={`mt-8 block rounded-md px-6 py-3 text-center font-semibold ${p.featured ? "bg-brand text-ink hover:bg-brand/90" : "bg-ink text-background hover:bg-ink/85"}`}
+              >
+                {p.cta}
+              </Link>
             </div>
           ))}
         </div>
