@@ -1,10 +1,30 @@
 import { Link } from "@tanstack/react-router";
-import { TrendingUp, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+import { TrendingUp, MapPin, Mail, Phone, MessageCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { subscribeNewsletter } from "@/lib/newsletter.functions";
 
 export function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const doSubscribe = useServerFn(subscribeNewsletter);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.includes("@")) return;
+    setLoading(true);
+    setError("");
+    try {
+      await doSubscribe({ data: { email } });
+      setSubscribed(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not subscribe.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <footer className="border-t border-border bg-ink text-background">
@@ -33,10 +53,7 @@ export function Footer() {
           {subscribed ? (
             <p className="mt-3 text-sm text-brand">Thanks! You're subscribed.</p>
           ) : (
-            <form
-              onSubmit={(e) => { e.preventDefault(); if (email.includes("@")) setSubscribed(true); }}
-              className="mt-3 flex flex-col gap-2"
-            >
+            <form onSubmit={handleSubmit} className="mt-3 flex flex-col gap-2">
               <input
                 type="email"
                 required
@@ -45,7 +62,10 @@ export function Footer() {
                 placeholder="you@email.com"
                 className="rounded-md border border-background/20 bg-background/10 px-3 py-2 text-sm text-background placeholder:text-background/40 outline-none focus:border-brand"
               />
-              <button type="submit" className="rounded-md bg-brand px-3 py-2 text-sm font-semibold text-ink hover:bg-brand/90">Subscribe</button>
+              {error && <p className="text-xs text-danger">{error}</p>}
+              <button type="submit" disabled={loading} className="flex items-center justify-center gap-2 rounded-md bg-brand px-3 py-2 text-sm font-semibold text-ink hover:bg-brand/90 disabled:opacity-50">
+                {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Subscribe"}
+              </button>
             </form>
           )}
         </div>
