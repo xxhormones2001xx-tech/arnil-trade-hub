@@ -2,15 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { PageHero } from "./investing";
 import { useState } from "react";
-import { Mail, Phone, MessageCircle } from "lucide-react";
+import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Arnil Etrade" },
-      { name: "description", content: "Get in touch with Arnil Etrade support 24/7 via chat, phone or email." },
+      { name: "description", content: "Get in touch with Arnil Etrade support 24/7 via chat, phone, WhatsApp or email." },
       { property: "og:title", content: "Contact — Arnil Etrade" },
-      { property: "og:description", content: "24/7 support via chat, phone or email." },
+      { property: "og:description", content: "24/7 support via chat, phone, WhatsApp or email." },
     ],
   }),
   component: Contact,
@@ -25,18 +25,28 @@ function Contact() {
         <div>
           <div className="space-y-4">
             {[
-              { icon: MessageCircle, title: "Live chat", desc: "Average response < 2 minutes" },
-              { icon: Phone, title: "1-800-ARNIL-ET", desc: "Available 24 hours, 7 days a week" },
-              { icon: Mail, title: "support@arniletrade.com", desc: "We reply within a few hours" },
-            ].map((c) => (
-              <div key={c.title} className="flex items-start gap-4 rounded-xl border border-border bg-card p-5">
-                <c.icon className="h-6 w-6 text-brand" />
-                <div>
-                  <p className="font-semibold text-ink">{c.title}</p>
-                  <p className="text-sm text-muted-foreground">{c.desc}</p>
-                </div>
-              </div>
-            ))}
+              { icon: MessageCircle, title: "WhatsApp us", desc: "+1 662 607-1912", href: "https://wa.me/16626071912" },
+              { icon: Phone, title: "Call support", desc: "+1 662 607-1912 · 24/7", href: "tel:+16626071912" },
+              { icon: Mail, title: "support@arniletrade.com", desc: "We reply within a few hours", href: "mailto:support@arniletrade.com" },
+              { icon: MapPin, title: "Head office", desc: "403 Cummins Street, Franklin, Tennessee 37064" },
+            ].map((c) => {
+              const Inner = (
+                <>
+                  <c.icon className="h-6 w-6 text-brand" />
+                  <div>
+                    <p className="font-semibold text-ink">{c.title}</p>
+                    <p className="text-sm text-muted-foreground">{c.desc}</p>
+                  </div>
+                </>
+              );
+              return c.href ? (
+                <a key={c.title} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noopener" className="flex items-start gap-4 rounded-xl border border-border bg-card p-5 transition hover:border-brand">
+                  {Inner}
+                </a>
+              ) : (
+                <div key={c.title} className="flex items-start gap-4 rounded-xl border border-border bg-card p-5">{Inner}</div>
+              );
+            })}
           </div>
         </div>
         <form

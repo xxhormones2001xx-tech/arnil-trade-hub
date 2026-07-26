@@ -1,10 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+import { useState } from "react";
 
 export function Footer() {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
   return (
     <footer className="border-t border-border bg-ink text-background">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-5 md:px-6">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-6 md:px-6">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 font-display text-xl font-bold">
             <span className="grid h-8 w-8 place-items-center rounded-md bg-brand text-ink"><TrendingUp className="h-4 w-4" /></span>
@@ -13,10 +17,38 @@ export function Footer() {
           <p className="mt-4 max-w-sm text-sm text-background/70">
             A modern brokerage for the next generation of investors. Trade stocks, ETFs, options, futures and crypto — all in one account.
           </p>
+          <address className="mt-5 space-y-2 text-sm not-italic text-background/70">
+            <div className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-brand" /><span>403 Cummins Street<br />Franklin, Tennessee 37064</span></div>
+            <div className="flex items-center gap-2"><Mail className="h-4 w-4 text-brand" /><a href="mailto:support@arniletrade.com" className="hover:text-brand">support@arniletrade.com</a></div>
+            <div className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-brand" /><a href="https://wa.me/16626071912" target="_blank" rel="noopener" className="hover:text-brand">WhatsApp: +1 662 607-1912</a></div>
+            <div className="flex items-center gap-2"><Phone className="h-4 w-4 text-brand" /><span>+1 662 607-1912</span></div>
+          </address>
         </div>
         <FooterCol title="Products" links={[["Investing","/investing"],["Trading","/trading"],["Retirement","/pricing"],["Markets","/markets"]]} />
-        <FooterCol title="Company" links={[["About","/about"],["Pricing","/pricing"],["Contact","/contact"],["Careers","/about"]]} />
+        <FooterCol title="Company" links={[["About","/about"],["Pricing","/pricing"],["Contact","/contact"],["FAQ","/faq"]]} />
         <FooterCol title="Account" links={[["Log in","/login"],["Open account","/open-account"],["Help center","/contact"]]} />
+        <div>
+          <h4 className="font-display text-sm font-semibold text-background">Newsletter</h4>
+          <p className="mt-4 text-sm text-background/70">Market insights, weekly.</p>
+          {subscribed ? (
+            <p className="mt-3 text-sm text-brand">Thanks! You're subscribed.</p>
+          ) : (
+            <form
+              onSubmit={(e) => { e.preventDefault(); if (email.includes("@")) setSubscribed(true); }}
+              className="mt-3 flex flex-col gap-2"
+            >
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@email.com"
+                className="rounded-md border border-background/20 bg-background/10 px-3 py-2 text-sm text-background placeholder:text-background/40 outline-none focus:border-brand"
+              />
+              <button type="submit" className="rounded-md bg-brand px-3 py-2 text-sm font-semibold text-ink hover:bg-brand/90">Subscribe</button>
+            </form>
+          )}
+        </div>
       </div>
       <div className="border-t border-background/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-background/60 md:flex-row md:items-center md:justify-between md:px-6">
