@@ -30,7 +30,10 @@ export async function sendTemplateEmail<T extends TemplateName>(
   const Component = entry.component as React.ComponentType<Record<string, unknown>>;
   const html = await render(React.createElement(Component, options.templateData as Record<string, unknown>));
   const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-  const subject = typeof entry.subject === "function" ? entry.subject(options.templateData) : entry.subject;
+  const subject =
+    typeof entry.subject === "function"
+      ? (entry.subject as (data: typeof options.templateData) => string)(options.templateData)
+      : entry.subject;
 
   return sendLovableEmail(
     {
