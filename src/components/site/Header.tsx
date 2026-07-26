@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, TrendingUp } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { Logo } from "./Logo";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -15,11 +16,10 @@ const nav = [
 export function Header() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-        <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold text-ink">
-          <span className="grid h-8 w-8 place-items-center rounded-md bg-ink text-brand"><TrendingUp className="h-4 w-4" /></span>
-          Arnil <span className="text-brand">Etrade</span>
+        <Link to="/" aria-label="Arnil Etrade home" className="flex items-center">
+          <Logo className="h-8 w-auto md:h-9" />
         </Link>
         <nav className="hidden items-center gap-7 md:flex">
           {nav.map((n) => (

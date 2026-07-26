@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { TrendingUp, MapPin, Mail, Phone, MessageCircle, Loader2 } from "lucide-react";
+import { MapPin, Mail, Phone, MessageCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { subscribeNewsletter } from "@/lib/newsletter.functions";
+import { Logo } from "./Logo";
 
 export function Footer() {
   const [email, setEmail] = useState("");
@@ -30,10 +31,8 @@ export function Footer() {
     <footer className="border-t border-border bg-ink text-background">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-6 md:px-6">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-2 font-display text-xl font-bold">
-            <span className="grid h-8 w-8 place-items-center rounded-md bg-brand text-ink"><TrendingUp className="h-4 w-4" /></span>
-            Arnil <span className="text-brand">Etrade</span>
-          </div>
+          <Logo className="h-9 w-auto" invert />
+
           <p className="mt-4 max-w-sm text-sm text-background/70">
             A modern brokerage for the next generation of investors. Trade stocks, ETFs, options, futures and crypto — all in one account.
           </p>
