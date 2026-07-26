@@ -14,7 +14,172 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      account_applications: {
+        Row: {
+          account_type: string
+          country: string | null
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          paid_at: string | null
+          phone: string | null
+          plan_name: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_type?: string
+          country?: string | null
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          paid_at?: string | null
+          phone?: string | null
+          plan_name?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_type?: string
+          country?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          paid_at?: string | null
+          phone?: string | null
+          plan_name?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          source: string | null
+          subscribed_at: string
+          unsubscribed_at: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          source?: string | null
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          source?: string | null
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Relationships: []
+      }
+      otp_codes: {
+        Row: {
+          application_id: string
+          code: string
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          verified_at: string | null
+        }
+        Insert: {
+          application_id: string
+          code: string
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          verified_at?: string | null
+        }
+        Update: {
+          application_id?: string
+          code?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "otp_codes_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "account_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          application_id: string
+          created_at: string
+          currency: string
+          email: string
+          id: string
+          paid_at: string | null
+          status: string
+          stripe_customer_id: string | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          application_id: string
+          created_at?: string
+          currency?: string
+          email: string
+          id?: string
+          paid_at?: string | null
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          application_id?: string
+          created_at?: string
+          currency?: string
+          email?: string
+          id?: string
+          paid_at?: string | null
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "account_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
