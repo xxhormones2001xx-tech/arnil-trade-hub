@@ -20,15 +20,17 @@ const plans = [
     name: "Instant Access",
     price: "$50",
     period: "one-time",
-    tag: "Fast-track",
+    tag: "Best value — $200 bonus",
     icon: Zap,
-    cta: "Pay & register",
+    cta: "Claim $200 bonus",
+    featured: true,
     features: [
+      "🎁 $200 registration bonus with $10 deposit",
       "Same-day account activation",
       "Priority KYC review",
-      "$50 platform credit",
       "Dedicated onboarding specialist",
       "Instant deposit up to $1,000",
+      "Withdraw anytime — no lock-up",
     ],
   },
   {
@@ -46,7 +48,6 @@ const plans = [
     tag: "For frequent traders",
     cta: "Open account",
     features: ["Everything in Standard", "$0.50 per options contract", "Advanced charts & Level 2", "Priority routing"],
-    featured: true,
   },
   {
     name: "Wealth",
