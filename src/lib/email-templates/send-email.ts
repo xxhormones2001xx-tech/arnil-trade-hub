@@ -1,3 +1,4 @@
+import React from "react";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 import { render } from "@react-email/render";
 import { TEMPLATES, type TemplateName } from "./registry";
@@ -22,8 +23,8 @@ export async function sendTemplateEmail<T extends TemplateName>(
   }
 
   const entry = TEMPLATES[templateName];
-  const Component = entry.component as React.ComponentType<unknown>;
-  const html = await render(<Component {...options.templateData} />);
+  const Component = entry.component as React.ComponentType<Record<string, unknown>>;
+  const html = await render(React.createElement(Component, options.templateData as Record<string, unknown>));
   const subject = typeof entry.subject === "function" ? entry.subject(options.templateData as never) : entry.subject;
 
   return sendLovableEmail({
