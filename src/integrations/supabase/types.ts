@@ -174,7 +174,7 @@ export type Database = {
           {
             foreignKeyName: "payments_application_id_fkey"
             columns: ["application_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "account_applications"
             referencedColumns: ["id"]
           },
