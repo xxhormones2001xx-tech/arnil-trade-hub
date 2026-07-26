@@ -211,7 +211,6 @@ function Home() {
             [Clock, "24/7 support", "Real humans, real answers, day or night."],
           ].map(([Icon, t, d]) => (
             <div key={t as string} className="flex gap-4">
-              {/* @ts-expect-error dynamic icon */}
               <Icon className="h-8 w-8 shrink-0 text-brand" />
               <div>
                 <p className="font-display font-semibold text-ink">{t as string}</p>
@@ -238,6 +237,15 @@ function Home() {
         </div>
       </section>
     </SiteLayout>
+  );
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-background/60">{label}</span>
+      <span className="font-semibold text-background">{value}</span>
+    </div>
   );
 }
 
