@@ -19,11 +19,17 @@ export const Route = createFileRoute("/open-account")({
 
 const steps = ["Account type", "Your details", "Review"];
 const accountTypes = ["Individual brokerage", "Joint brokerage", "Traditional IRA", "Roth IRA"];
+const planOptions = [
+  { name: "Standard", label: "Standard — Free" },
+  { name: "Active Trader", label: "Active Trader — Free" },
+  { name: "Wealth", label: "Wealth — Free" },
+  { name: "Instant Access", label: "Instant Access — $50 one-time" },
+];
 
 function OpenAccount() {
   const { plan } = useSearch({ strict: false }) as { plan?: string };
   const navigate = useNavigate();
-  const selectedPlan = plan ?? "Standard";
+  const [selectedPlan, setSelectedPlan] = useState(plan ?? "Standard");
   const isInstantAccess = selectedPlan === "Instant Access";
 
   const [step, setStep] = useState(0);
