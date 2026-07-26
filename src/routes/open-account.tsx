@@ -120,9 +120,17 @@ function OpenAccount() {
               className="rounded-2xl border border-border bg-card p-8"
             >
               <div className="mb-6 rounded-lg bg-muted p-4">
-                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Selected plan</p>
-                <p className="mt-1 font-display text-xl font-bold text-ink">{selectedPlan}</p>
-                {isInstantAccess && <p className="text-sm text-muted-foreground">$50 one-time activation fee</p>}
+                <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Select your plan</label>
+                <select
+                  value={selectedPlan}
+                  onChange={(e) => setSelectedPlan(e.target.value)}
+                  className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 font-display text-lg font-bold text-ink outline-none focus:border-brand"
+                >
+                  {planOptions.map((p) => (
+                    <option key={p.name} value={p.name}>{p.label}</option>
+                  ))}
+                </select>
+                {isInstantAccess && <p className="mt-2 text-sm text-muted-foreground">$50 one-time activation fee — instant account access after payment.</p>}
               </div>
 
               {step === 0 && (
