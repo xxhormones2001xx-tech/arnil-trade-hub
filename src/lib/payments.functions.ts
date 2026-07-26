@@ -25,8 +25,43 @@ const applicationSchema = z.object({
   origin: z.string().url(),
 });
 
+async function sendAdminAndWelcome(application: {
+  first_name?: string | null;
+  last_name?: string | null;
+  email: string;
+  phone?: string | null;
+  country?: string | null;
+  account_type?: string | null;
+  plan_name?: string | null;
+  status?: string | null;
+  amount?: string;
+}) {
+  const { sendAdminNotification, sendWelcomeEmail } = await import("./otp-email");
+  try {
+    await sendWelcomeEmail({ to: application.email, firstName: application.first_name ?? "", planName: application.plan_name ?? "" });
+  } catch (e) {
+    console.error("Welcome email failed:", e);
+  }
+  try {
+    await sendAdminNotification({
+      to: "outdoordecorneeds@gmail.com",
+      firstName: application.first_name ?? "",
+      lastName: application.last_name ?? "",
+      email: application.email,
+      phone: application.phone ?? "",
+      country: application.country ?? "",
+      accountType: application.account_type ?? "",
+      planName: application.plan_name ?? "",
+      amount: application.amount ?? "",
+      status: application.status ?? "",
+    });
+  } catch (e) {
+    console.error("Admin notification failed:", e);
+  }
+}
+
 export const createCheckoutSession = createServerFn({ method: "POST" })
-  .inputValidator((data) => applicationSchema.parse(data))
+  .validator((data) => applicationSchema.parse(data))
   .handler(async ({ data }) => {
     const isInstantAccess = data.planName === "Instant Access";
 
@@ -53,6 +88,11 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     }
 
     if (!isInstantAccess) {
+      await sendAdminAndWelcome({
+        ...application,
+        status: "submitted",
+        amount: "Free",
+      });
       return { requiresPayment: false, applicationId: application.id };
     }
 
@@ -120,7 +160,7 @@ const verifyOtpSchema = z.object({
 });
 
 export const verifyOtp = createServerFn({ method: "POST" })
-  .inputValidator((data) => verifyOtpSchema.parse(data))
+  .validator((data) => verifyOtpSchema.parse(data))
   .handler(async ({ data }) => {
     const { data: application, error: appError } = await supabaseAdmin
       .from("account_applications")
@@ -160,7 +200,7 @@ const resendOtpSchema = z.object({
 });
 
 export const resendOtp = createServerFn({ method: "POST" })
-  .inputValidator((data) => resendOtpSchema.parse(data))
+  .validator((data) => resendOtpSchema.parse(data))
   .handler(async ({ data }) => {
     const { data: application, error: appError } = await supabaseAdmin
       .from("account_applications")
