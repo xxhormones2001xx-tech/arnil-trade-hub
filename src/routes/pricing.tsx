@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { PageHero } from "./investing";
-import { Check } from "lucide-react";
+import { Check, Zap } from "lucide-react";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — Arnil Etrade" },
-      { name: "description", content: "Zero commissions on stocks and ETFs. Transparent, low pricing on options, futures and crypto." },
+      { title: "Pricing & Plans — Arnil Etrade" },
+      { name: "description", content: "Zero commissions on stocks and ETFs. Choose from Instant Access, Standard, Active Trader or Wealth plans." },
       { property: "og:title", content: "Pricing — Arnil Etrade" },
       { property: "og:description", content: "Transparent, low pricing across every market." },
     ],
@@ -16,9 +16,42 @@ export const Route = createFileRoute("/pricing")({
 });
 
 const plans = [
-  { name: "Standard", price: "$0", tag: "Most popular", features: ["Commission-free stocks & ETFs", "Fractional shares from $1", "Mobile & web platforms", "24/7 support"] },
-  { name: "Active Trader", price: "$0", tag: "For frequent traders", features: ["Everything in Standard", "$0.50 per options contract", "Advanced charts & Level 2", "Priority routing"], featured: true },
-  { name: "Wealth", price: "0.25%", tag: "Managed portfolios", features: ["Automated investing", "Tax-loss harvesting", "Human advisor access", "No account minimum"] },
+  {
+    name: "Instant Access",
+    price: "$50",
+    period: "one-time",
+    tag: "Fast-track",
+    icon: Zap,
+    features: [
+      "Same-day account activation",
+      "Priority KYC review",
+      "$50 platform credit",
+      "Dedicated onboarding specialist",
+      "Instant deposit up to $1,000",
+    ],
+  },
+  {
+    name: "Standard",
+    price: "$0",
+    period: "per trade",
+    tag: "Most popular",
+    features: ["Commission-free stocks & ETFs", "Fractional shares from $1", "Mobile & web platforms", "24/7 support"],
+  },
+  {
+    name: "Active Trader",
+    price: "$0",
+    period: "per trade",
+    tag: "For frequent traders",
+    features: ["Everything in Standard", "$0.50 per options contract", "Advanced charts & Level 2", "Priority routing"],
+    featured: true,
+  },
+  {
+    name: "Wealth",
+    price: "0.25%",
+    period: "per year",
+    tag: "Managed portfolios",
+    features: ["Automated investing", "Tax-loss harvesting", "Human advisor access", "No account minimum"],
+  },
 ];
 
 function Pricing() {
@@ -26,13 +59,16 @@ function Pricing() {
     <SiteLayout>
       <PageHero eyebrow="Pricing" title="Transparent pricing. No hidden fees." desc="Zero commissions on stocks and ETFs. Pay only for what you use." />
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {plans.map((p) => (
             <div key={p.name} className={`rounded-2xl border p-8 ${p.featured ? "border-brand bg-ink text-background shadow-2xl" : "border-border bg-card"}`}>
-              <p className={`text-xs font-semibold uppercase tracking-widest ${p.featured ? "text-brand" : "text-muted-foreground"}`}>{p.tag}</p>
+              <div className="flex items-center justify-between">
+                <p className={`text-xs font-semibold uppercase tracking-widest ${p.featured ? "text-brand" : "text-muted-foreground"}`}>{p.tag}</p>
+                {p.icon ? <p.icon className="h-5 w-5 text-brand" /> : null}
+              </div>
               <h3 className={`mt-2 font-display text-2xl font-bold ${p.featured ? "text-background" : "text-ink"}`}>{p.name}</h3>
               <p className={`mt-4 font-display text-5xl font-bold ${p.featured ? "text-background" : "text-ink"}`}>{p.price}</p>
-              <p className={`mt-1 text-sm ${p.featured ? "text-background/60" : "text-muted-foreground"}`}>per trade / per year</p>
+              <p className={`mt-1 text-sm ${p.featured ? "text-background/60" : "text-muted-foreground"}`}>{p.period}</p>
               <ul className="mt-8 space-y-3 text-sm">
                 {p.features.map((f) => (
                   <li key={f} className={`flex items-start gap-2 ${p.featured ? "text-background/90" : "text-ink"}`}>
@@ -51,6 +87,7 @@ function Pricing() {
             <table className="w-full text-sm">
               <tbody className="bg-card">
                 {[
+                  ["Instant Access activation fee", "$50 one-time"],
                   ["US stocks & ETFs (online)", "$0"],
                   ["Options — per contract", "$0.50"],
                   ["Futures — per contract, per side", "$1.50"],
