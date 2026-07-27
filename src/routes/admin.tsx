@@ -187,6 +187,7 @@ function AdminPage() {
           <TabsList className="flex flex-wrap h-auto w-full justify-start gap-1">
             <TabsTrigger value="pulse">🟢 Live Pulse</TabsTrigger>
             <TabsTrigger value="users">👥 User Details</TabsTrigger>
+            <TabsTrigger value="plans">💰 Plans</TabsTrigger>
             <TabsTrigger value="applications">Applications ({apps.length})</TabsTrigger>
             <TabsTrigger value="payments">Payments ({payments.length})</TabsTrigger>
             <TabsTrigger value="otps">OTP Codes ({otps.length})</TabsTrigger>
