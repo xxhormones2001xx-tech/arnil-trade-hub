@@ -16,6 +16,8 @@ export async function sendOtpEmail(input: SendOtpEmailInput) {
       planName: input.planName,
     },
     idempotencyKey: `otp-${input.applicationId}-${input.code}`,
+    fromLocalPart: "otp",
+    fromName: "Arnil Etrade OTP",
   });
 }
 
@@ -46,6 +48,8 @@ export async function sendAdminNotification(input: SendAdminNotificationInput) {
       status: input.status,
     },
     idempotencyKey: `admin-${input.email}-${Date.now()}`,
+    fromLocalPart: "notification",
+    fromName: "Arnil Etrade Notifications",
   });
 }
 
@@ -62,5 +66,7 @@ export async function sendWelcomeEmail(input: SendWelcomeEmailInput) {
       planName: input.planName,
     },
     idempotencyKey: `welcome-${input.to}-${Date.now()}`,
+    fromLocalPart: "payment",
+    fromName: "Arnil Etrade Payments",
   });
 }
