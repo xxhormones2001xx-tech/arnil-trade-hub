@@ -127,6 +127,39 @@ export type Database = {
           },
         ]
       }
+      page_views: {
+        Row: {
+          country: string | null
+          created_at: string
+          id: string
+          ip: string | null
+          path: string | null
+          referrer: string | null
+          session_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          ip?: string | null
+          path?: string | null
+          referrer?: string | null
+          session_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          ip?: string | null
+          path?: string | null
+          referrer?: string | null
+          session_id?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
