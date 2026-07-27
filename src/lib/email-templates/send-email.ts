@@ -12,6 +12,10 @@ export interface SendTemplateEmailOptions<T extends TemplateName> {
   templateData: React.ComponentProps<typeof TEMPLATES[T]["component"]>;
   idempotencyKey: string;
   replyTo?: string;
+  /** Local-part of sender, e.g. "otp" -> otp@arniletrade.com. Defaults to "noreply". */
+  fromLocalPart?: string;
+  /** Display name override */
+  fromName?: string;
 }
 
 export async function sendTemplateEmail<T extends TemplateName>(
