@@ -1,8 +1,9 @@
 import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { createCheckoutSession } from "@/lib/payments.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { Check, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/open-account")({
@@ -19,18 +20,25 @@ export const Route = createFileRoute("/open-account")({
 
 const steps = ["Account type", "Your details", "Review"];
 const accountTypes = ["Individual brokerage", "Joint brokerage", "Traditional IRA", "Roth IRA"];
-const planOptions = [
-  { name: "Standard", label: "Standard — Free" },
-  { name: "Active Trader", label: "Active Trader — Free" },
-  { name: "Wealth", label: "Wealth — Free" },
-  { name: "Instant Access", label: "Instant Access — $50 one-time" },
-];
+
+type PlanOpt = { name: string; amount_cents: number };
 
 function OpenAccount() {
   const { plan } = useSearch({ strict: false }) as { plan?: string };
   const navigate = useNavigate();
+  const [planOptions, setPlanOptions] = useState<PlanOpt[]>([]);
   const [selectedPlan, setSelectedPlan] = useState(plan ?? "Standard");
-  const isInstantAccess = selectedPlan === "Instant Access";
+  const currentPlan = planOptions.find((p) => p.name === selectedPlan);
+  const isInstantAccess = (currentPlan?.amount_cents ?? 0) > 0;
+
+  useEffect(() => {
+    supabase
+      .from("plans")
+      .select("name, amount_cents, sort_order")
+      .eq("active", true)
+      .order("sort_order", { ascending: true })
+      .then(({ data }) => setPlanOptions((data as PlanOpt[]) ?? []));
+  }, []);
 
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
@@ -65,7 +73,7 @@ function OpenAccount() {
         data: {
           ...form,
           planName: selectedPlan,
-          amount: isInstantAccess ? 5000 : 0,
+          amount: currentPlan?.amount_cents ?? 0,
           currency: "usd",
           origin,
         },
@@ -127,10 +135,12 @@ function OpenAccount() {
                   className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 font-display text-lg font-bold text-ink outline-none focus:border-brand"
                 >
                   {planOptions.map((p) => (
-                    <option key={p.name} value={p.name}>{p.label}</option>
+                    <option key={p.name} value={p.name}>
+                      {p.name} — {p.amount_cents > 0 ? `$${(p.amount_cents / 100).toFixed(2)} one-time` : "Free"}
+                    </option>
                   ))}
                 </select>
-                {isInstantAccess && <p className="mt-2 text-sm text-muted-foreground">$50 one-time activation fee — instant account access after payment.</p>}
+                {isInstantAccess && <p className="mt-2 text-sm text-muted-foreground">${((currentPlan?.amount_cents ?? 0) / 100).toFixed(2)} one-time activation fee — instant account access after payment.</p>}
               </div>
 
               {step === 0 && (
