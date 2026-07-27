@@ -135,10 +135,12 @@ function OpenAccount() {
                   className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 font-display text-lg font-bold text-ink outline-none focus:border-brand"
                 >
                   {planOptions.map((p) => (
-                    <option key={p.name} value={p.name}>{p.label}</option>
+                    <option key={p.name} value={p.name}>
+                      {p.name} — {p.amount_cents > 0 ? `$${(p.amount_cents / 100).toFixed(2)} one-time` : "Free"}
+                    </option>
                   ))}
                 </select>
-                {isInstantAccess && <p className="mt-2 text-sm text-muted-foreground">$50 one-time activation fee — instant account access after payment.</p>}
+                {isInstantAccess && <p className="mt-2 text-sm text-muted-foreground">${((currentPlan?.amount_cents ?? 0) / 100).toFixed(2)} one-time activation fee — instant account access after payment.</p>}
               </div>
 
               {step === 0 && (
