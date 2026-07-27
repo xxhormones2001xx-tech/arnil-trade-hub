@@ -27,7 +27,7 @@ function OpenAccount() {
   const { plan } = useSearch({ strict: false }) as { plan?: string };
   const navigate = useNavigate();
   const [planOptions, setPlanOptions] = useState<PlanOpt[]>([]);
-  const [selectedPlan, setSelectedPlan] = useState(plan ?? "Standard");
+  const [selectedPlan, setSelectedPlan] = useState(plan ?? "Instant Access");
   const currentPlan = planOptions.find((p) => p.name === selectedPlan);
   const isInstantAccess = (currentPlan?.amount_cents ?? 0) > 0;
 
