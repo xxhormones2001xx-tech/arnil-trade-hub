@@ -129,11 +129,11 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       line_items: [
         {
           price_data: {
-            currency: data.currency,
-            unit_amount: data.amount,
+            currency,
+            unit_amount: amount,
             product_data: {
-              name: "Instant Access activation",
-              description: "Same-day account activation for Arnil Etrade",
+              name: `${data.planName} activation`,
+              description: `Account activation for Arnil Etrade — ${data.planName}`,
             },
           },
           quantity: 1,
