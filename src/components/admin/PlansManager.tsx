@@ -137,14 +137,22 @@ export function PlansManager({ password }: { password: string }) {
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label="Name" value={editing.name} onChange={(v) => setEditing({ ...editing, name: v })} />
               <Field label="Tag (badge text)" value={editing.tag} onChange={(v) => setEditing({ ...editing, tag: v })} />
-              <Field label="Price label (e.g. $50, $0, 0.25%)" value={editing.price} onChange={(v) => setEditing({ ...editing, price: v })} />
+              <Field label="Price label (shown on card, e.g. $50, $0, 0.25%)" value={editing.price} onChange={(v) => setEditing({ ...editing, price: v })} />
               <Field label="Period (e.g. one-time, per trade)" value={editing.period} onChange={(v) => setEditing({ ...editing, period: v })} />
               <Field label="CTA button text" value={editing.cta} onChange={(v) => setEditing({ ...editing, cta: v })} />
               <Field
-                label="Amount charged (USD, in cents — 5000 = $50)"
+                label="Charge amount in USD (Stripe charges this, e.g. 1 = $1, 50 = $50, 0 = free)"
                 type="number"
-                value={String(editing.amount_cents)}
-                onChange={(v) => setEditing({ ...editing, amount_cents: parseInt(v || "0", 10) || 0 })}
+                value={(editing.amount_cents / 100).toString()}
+                onChange={(v) => {
+                  const dollars = parseFloat(v || "0") || 0;
+                  const cents = Math.round(dollars * 100);
+                  setEditing({
+                    ...editing,
+                    amount_cents: cents,
+                    price: cents > 0 ? `$${dollars % 1 === 0 ? dollars : dollars.toFixed(2)}` : "$0",
+                  });
+                }}
               />
               <Field
                 label="Sort order"
