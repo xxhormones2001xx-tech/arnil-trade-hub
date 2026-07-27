@@ -63,7 +63,15 @@ async function sendAdminAndWelcome(application: {
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .validator((data) => applicationSchema.parse(data))
   .handler(async ({ data }) => {
-    const isInstantAccess = data.planName === "Instant Access";
+    // Source of truth for pricing: plans table
+    const { data: planRow } = await supabaseAdmin
+      .from("plans")
+      .select("amount_cents, currency, name")
+      .eq("name", data.planName)
+      .maybeSingle();
+    const amount = planRow?.amount_cents ?? 0;
+    const currency = planRow?.currency ?? data.currency;
+    const isInstantAccess = amount > 0;
 
     const { data: application, error: appError } = await supabaseAdmin
       .from("account_applications")
