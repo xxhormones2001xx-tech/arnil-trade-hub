@@ -185,7 +185,7 @@ function OpenAccount() {
                   </p>
                   {isInstantAccess && (
                     <p className="mt-3 text-sm text-ink">
-                      You will be redirected to Stripe to complete the <strong>$50</strong> Instant Access payment.
+                      You will be redirected to Stripe to complete the <strong>${((currentPlan?.amount_cents ?? 0) / 100).toFixed(2)}</strong> {selectedPlan} payment.
                     </p>
                   )}
                   <label className="mt-6 flex cursor-pointer items-center gap-3 rounded-lg border border-border p-4">
