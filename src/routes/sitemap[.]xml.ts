@@ -1,17 +1,47 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// TODO: replace with your project URL once a project name or custom domain is set.
-const BASE_URL = "";
+const BASE_URL = "https://arniletrade.com";
 
-const paths = ["/", "/investing", "/trading", "/markets", "/pricing", "/about", "/contact", "/faq", "/login", "/open-account", "/verify-otp"];
+interface SitemapEntry {
+  path: string;
+  changefreq?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
+  priority?: string;
+}
+
+const entries: SitemapEntry[] = [
+  { path: "/", changefreq: "daily", priority: "1.0" },
+  { path: "/investing", changefreq: "weekly", priority: "0.9" },
+  { path: "/trading", changefreq: "weekly", priority: "0.9" },
+  { path: "/markets", changefreq: "daily", priority: "0.9" },
+  { path: "/pricing", changefreq: "weekly", priority: "0.9" },
+  { path: "/about", changefreq: "monthly", priority: "0.7" },
+  { path: "/contact", changefreq: "monthly", priority: "0.7" },
+  { path: "/faq", changefreq: "monthly", priority: "0.7" },
+  { path: "/open-account", changefreq: "monthly", priority: "0.8" },
+  { path: "/login", changefreq: "yearly", priority: "0.3" },
+];
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const urls = paths.map((p) => `  <url><loc>${BASE_URL}${p}</loc><changefreq>weekly</changefreq></url>`).join("\n");
+        const urls = entries
+          .map((e) =>
+            [
+              `  <url>`,
+              `    <loc>${BASE_URL}${e.path}</loc>`,
+              e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
+              e.priority ? `    <priority>${e.priority}</priority>` : null,
+              `  </url>`,
+            ]
+              .filter(Boolean)
+              .join("\n"),
+          )
+          .join("\n");
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`;
-        return new Response(xml, { headers: { "Content-Type": "application/xml", "Cache-Control": "public, max-age=3600" } });
+        return new Response(xml, {
+          headers: { "Content-Type": "application/xml", "Cache-Control": "public, max-age=3600" },
+        });
       },
     },
   },
