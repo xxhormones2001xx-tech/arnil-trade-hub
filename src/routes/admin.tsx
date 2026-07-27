@@ -87,7 +87,7 @@ function AdminPage() {
       } catch {}
     };
     tick();
-    const id = setInterval(tick, 5000);
+    const id = setInterval(tick, 1000);
     return () => { cancelled = true; clearInterval(id); };
   }, [authed, password, fetchLive]);
 
