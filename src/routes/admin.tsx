@@ -125,7 +125,7 @@ function AdminPage() {
   if (!authed) {
     return (
       <Layout>
-        <div className="container max-w-md py-16">
+        <div className="mx-auto max-w-md px-4 py-16">
           <Card>
             <CardHeader><CardTitle>Admin Login</CardTitle></CardHeader>
             <CardContent>
@@ -160,7 +160,7 @@ function AdminPage() {
 
   return (
     <Layout>
-      <div className="container py-8 space-y-6">
+      <div className="mx-auto max-w-7xl px-4 md:px-6 py-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
