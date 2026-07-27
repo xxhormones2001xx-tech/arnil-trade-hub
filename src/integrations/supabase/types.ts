@@ -213,6 +213,57 @@ export type Database = {
           },
         ]
       }
+      plans: {
+        Row: {
+          active: boolean
+          amount_cents: number
+          created_at: string
+          cta: string
+          currency: string
+          featured: boolean
+          features: Json
+          id: string
+          name: string
+          period: string
+          price: string
+          sort_order: number
+          tag: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          amount_cents?: number
+          created_at?: string
+          cta?: string
+          currency?: string
+          featured?: boolean
+          features?: Json
+          id?: string
+          name: string
+          period?: string
+          price?: string
+          sort_order?: number
+          tag?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          amount_cents?: number
+          created_at?: string
+          cta?: string
+          currency?: string
+          featured?: boolean
+          features?: Json
+          id?: string
+          name?: string
+          period?: string
+          price?: string
+          sort_order?: number
+          tag?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
