@@ -1,16 +1,8 @@
 import * as React from 'react'
-
 import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Link,
-  Preview,
-  Text,
+  Body, Button, Container, Head, Heading, Html, Link, Preview, Section, Text,
 } from '@react-email/components'
+import { brand, BRAND_NAME, BRAND_TAG } from './_brand'
 
 interface SignupEmailProps {
   siteName: string
@@ -19,66 +11,32 @@ interface SignupEmailProps {
   confirmationUrl: string
 }
 
-export const SignupEmail = ({
-  siteName,
-  siteUrl,
-  recipient,
-  confirmationUrl,
-}: SignupEmailProps) => (
+export const SignupEmail = ({ siteName, siteUrl, recipient, confirmationUrl }: SignupEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>Confirm your email for {siteName}</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Confirm your email</Heading>
-        <Text style={text}>
+    <Body style={brand.main}>
+      <Container style={brand.container}>
+        <Section style={brand.header}>
+          <Text style={brand.brandName}>{BRAND_NAME}</Text>
+          <Text style={brand.brandTag}>{BRAND_TAG}</Text>
+        </Section>
+        <Heading style={brand.h1}>Confirm your email</Heading>
+        <Text style={brand.text}>
           Thanks for signing up for{' '}
-          <Link href={siteUrl} style={link}>
-            <strong>{siteName}</strong>
-          </Link>
-          !
+          <Link href={siteUrl} style={brand.link}><strong>{siteName}</strong></Link>!
         </Text>
-        <Text style={text}>
+        <Text style={brand.text}>
           Please confirm your email address (
-          <Link href={`mailto:${recipient}`} style={link}>
-            {recipient}
-          </Link>
-          ) by clicking the button below:
+          <Link href={`mailto:${recipient}`} style={brand.link}>{recipient}</Link>) by clicking below:
         </Text>
-        <Button style={button} href={confirmationUrl}>
-          Verify Email
-        </Button>
-        <Text style={footer}>
-          If you didn't create an account, you can safely ignore this email.
-        </Text>
+        <Button style={brand.button} href={confirmationUrl}>Verify Email</Button>
+        <Section style={brand.divider} />
+        <Text style={brand.footer}>If you didn't create an account, you can safely ignore this email.</Text>
+        <Text style={brand.footerBrand}>© {new Date().getFullYear()} Arnil Etrade. All rights reserved.</Text>
       </Container>
     </Body>
   </Html>
 )
 
 export default SignupEmail
-
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const link = { color: 'inherit', textDecoration: 'underline' }
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
