@@ -259,6 +259,11 @@ function AdminPage() {
             </Card>
           </TabsContent>
 
+          <TabsContent value="plans">
+            <PlansManager password={password} />
+          </TabsContent>
+
+
           <TabsContent value="applications">
             <DataTable
               rows={apps}
