@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { PageHero } from "./investing";
 import { Check, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -15,69 +17,49 @@ export const Route = createFileRoute("/pricing")({
   component: Pricing,
 });
 
-const plans = [
-  {
-    name: "Instant Access",
-    price: "$50",
-    period: "one-time",
-    tag: "Best value — $200 bonus",
-    icon: Zap,
-    cta: "Claim $200 bonus",
-    featured: true,
-    features: [
-      "🎁 $200 registration bonus with $10 deposit",
-      "Same-day account activation",
-      "Priority KYC review",
-      "Dedicated onboarding specialist",
-      "Instant deposit up to $1,000",
-      "Withdraw anytime — no lock-up",
-    ],
-  },
-  {
-    name: "Standard",
-    price: "$0",
-    period: "per trade",
-    tag: "Most popular",
-    cta: "Open account",
-    features: ["Commission-free stocks & ETFs", "Fractional shares from $1", "Mobile & web platforms", "24/7 support"],
-  },
-  {
-    name: "Active Trader",
-    price: "$0",
-    period: "per trade",
-    tag: "For frequent traders",
-    cta: "Open account",
-    features: ["Everything in Standard", "$0.50 per options contract", "Advanced charts & Level 2", "Priority routing"],
-  },
-  {
-    name: "Wealth",
-    price: "0.25%",
-    period: "per year",
-    tag: "Managed portfolios",
-    cta: "Open account",
-    features: ["Automated investing", "Tax-loss harvesting", "Human advisor access", "No account minimum"],
-  },
-];
+type Plan = {
+  id: string;
+  name: string;
+  price: string;
+  period: string;
+  tag: string;
+  cta: string;
+  features: string[];
+  featured: boolean;
+  sort_order: number;
+};
 
 function Pricing() {
+  const [plans, setPlans] = useState<Plan[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("plans")
+      .select("id,name,price,period,tag,cta,features,featured,sort_order")
+      .eq("active", true)
+      .order("sort_order", { ascending: true })
+      .then(({ data }) => setPlans((data as Plan[]) ?? []));
+  }, []);
+
   return (
     <SiteLayout>
       <PageHero eyebrow="Pricing" title="Transparent pricing. No hidden fees." desc="Zero commissions on stocks and ETFs. Pay only for what you use." />
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:py-16 md:px-6">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((p) => (
-            <div key={p.name} className={`rounded-2xl border p-8 ${p.featured ? "border-brand bg-ink text-background shadow-2xl" : "border-border bg-card"}`}>
-              <div className="flex items-center justify-between">
+            <div key={p.id} className={`rounded-2xl border p-6 sm:p-8 ${p.featured ? "border-brand bg-ink text-background shadow-2xl" : "border-border bg-card"}`}>
+              <div className="flex items-center justify-between gap-2">
                 <p className={`text-xs font-semibold uppercase tracking-widest ${p.featured ? "text-brand" : "text-muted-foreground"}`}>{p.tag}</p>
-                {p.icon ? <p.icon className="h-5 w-5 text-brand" /> : null}
+                {p.featured ? <Zap className="h-5 w-5 shrink-0 text-brand" /> : null}
               </div>
-              <h3 className={`mt-2 font-display text-2xl font-bold ${p.featured ? "text-background" : "text-ink"}`}>{p.name}</h3>
-              <p className={`mt-4 font-display text-5xl font-bold ${p.featured ? "text-background" : "text-ink"}`}>{p.price}</p>
+              <h3 className={`mt-2 font-display text-xl sm:text-2xl font-bold ${p.featured ? "text-background" : "text-ink"}`}>{p.name}</h3>
+              <p className={`mt-4 font-display text-4xl sm:text-5xl font-bold ${p.featured ? "text-background" : "text-ink"}`}>{p.price}</p>
               <p className={`mt-1 text-sm ${p.featured ? "text-background/60" : "text-muted-foreground"}`}>{p.period}</p>
-              <ul className="mt-8 space-y-3 text-sm">
-                {p.features.map((f) => (
-                  <li key={f} className={`flex items-start gap-2 ${p.featured ? "text-background/90" : "text-ink"}`}>
-                    <Check className="mt-0.5 h-4 w-4 text-brand" /> {f}
+              <ul className="mt-6 sm:mt-8 space-y-3 text-sm">
+                {(p.features ?? []).map((f, i) => (
+                  <li key={i} className={`flex items-start gap-2 ${p.featured ? "text-background/90" : "text-ink"}`}>
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+                    <span className="min-w-0 break-words">{f}</span>
                   </li>
                 ))}
               </ul>
@@ -92,9 +74,9 @@ function Pricing() {
           ))}
         </div>
 
-        <div className="mt-20">
-          <h2 className="font-display text-3xl font-bold text-ink">Detailed pricing</h2>
-          <div className="mt-6 overflow-hidden rounded-xl border border-border">
+        <div className="mt-16 sm:mt-20">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink">Detailed pricing</h2>
+          <div className="mt-6 overflow-x-auto rounded-xl border border-border">
             <table className="w-full text-sm">
               <tbody className="bg-card">
                 {[
@@ -109,8 +91,8 @@ function Pricing() {
                   ["Domestic wire transfer", "$25"],
                 ].map(([l, v]) => (
                   <tr key={l} className="border-t border-border first:border-0">
-                    <td className="px-5 py-4 text-ink">{l}</td>
-                    <td className="px-5 py-4 text-right font-semibold text-ink">{v}</td>
+                    <td className="px-4 sm:px-5 py-3 sm:py-4 text-ink">{l}</td>
+                    <td className="px-4 sm:px-5 py-3 sm:py-4 text-right font-semibold text-ink">{v}</td>
                   </tr>
                 ))}
               </tbody>
