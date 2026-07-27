@@ -125,7 +125,7 @@ function AdminPage() {
   if (!authed) {
     return (
       <Layout>
-        <div className="container max-w-md py-16">
+        <div className="mx-auto max-w-md px-4 py-16">
           <Card>
             <CardHeader><CardTitle>Admin Login</CardTitle></CardHeader>
             <CardContent>
