@@ -12,6 +12,10 @@ export interface SendTemplateEmailOptions<T extends TemplateName> {
   templateData: React.ComponentProps<typeof TEMPLATES[T]["component"]>;
   idempotencyKey: string;
   replyTo?: string;
+  /** Local-part of sender, e.g. "otp" -> otp@arniletrade.com. Defaults to "noreply". */
+  fromLocalPart?: string;
+  /** Display name override */
+  fromName?: string;
 }
 
 export async function sendTemplateEmail<T extends TemplateName>(
@@ -35,10 +39,12 @@ export async function sendTemplateEmail<T extends TemplateName>(
       ? (entry.subject as (data: typeof options.templateData) => string)(options.templateData)
       : entry.subject;
 
+  const localPart = options.fromLocalPart ?? "noreply";
+  const displayName = options.fromName ?? FROM_NAME;
   return sendLovableEmail(
     {
       to,
-      from: `${FROM_NAME} <noreply@${FROM_DOMAIN || SENDER_DOMAIN}>`,
+      from: `${displayName} <${localPart}@${FROM_DOMAIN || SENDER_DOMAIN}>`,
       sender_domain: SENDER_DOMAIN,
       subject,
       html,

@@ -183,6 +183,37 @@ function AdminPage() {
           <Card><CardContent className="pt-6"><div className="text-2xl font-bold">{pendingCount}</div><p className="text-xs text-muted-foreground">Pending</p></CardContent></Card>
         </div>
 
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              💵 Successfully Paid Users
+              <Badge variant="default">{paidCount}</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DataTable
+              rows={apps.filter((a) => a.status === "paid" || a.status === "verified")}
+              columns={[
+                { key: "paid_at", label: "Paid at", render: (r) => fmt(r.paid_at ?? r.created_at) },
+                { key: "name", label: "Name", render: (r) => `${r.first_name ?? ""} ${r.last_name ?? ""}`.trim() || "—" },
+                { key: "email", label: "Email" },
+                { key: "phone", label: "Phone" },
+                { key: "country", label: "Country" },
+                { key: "plan_name", label: "Plan" },
+                {
+                  key: "amount",
+                  label: "Amount",
+                  render: (r) => {
+                    const p = payments.find((pp) => pp.application_id === r.id && (pp.status === "paid" || pp.status === "succeeded"));
+                    return p ? `$${(p.amount / 100).toFixed(2)} ${(p.currency ?? "").toUpperCase()}` : "—";
+                  },
+                },
+                { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
+              ]}
+            />
+          </CardContent>
+        </Card>
+
         <Tabs defaultValue="pulse">
           <TabsList className="flex flex-wrap h-auto w-full justify-start gap-1">
             <TabsTrigger value="pulse">🟢 Live Pulse</TabsTrigger>
