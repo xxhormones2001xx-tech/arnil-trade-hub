@@ -87,7 +87,7 @@ function AdminPage() {
       } catch {}
     };
     tick();
-    const id = setInterval(tick, 5000);
+    const id = setInterval(tick, 1000);
     return () => { cancelled = true; clearInterval(id); };
   }, [authed, password, fetchLive]);
 
@@ -182,70 +182,80 @@ function AdminPage() {
           <Card><CardContent className="pt-6"><div className="text-2xl font-bold">{pendingCount}</div><p className="text-xs text-muted-foreground">Pending</p></CardContent></Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="relative flex h-3 w-3">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500"></span>
-              </span>
-              Live Visitors
-              <Badge variant="secondary" className="ml-2">auto-refresh 5s</Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="rounded-md border p-4">
-                <div className="text-3xl font-bold text-emerald-600">{live?.liveCount ?? 0}</div>
-                <p className="text-xs text-muted-foreground">Online now (last 60s)</p>
-              </div>
-              <div className="rounded-md border p-4">
-                <div className="text-3xl font-bold">{live?.uniqueToday ?? 0}</div>
-                <p className="text-xs text-muted-foreground">Unique visitors (24h)</p>
-              </div>
-              <div className="rounded-md border p-4">
-                <div className="text-3xl font-bold">{live?.totalViews ?? 0}</div>
-                <p className="text-xs text-muted-foreground">Total page views</p>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="mb-2 text-sm font-semibold">Currently online</h3>
-              <DataTable
-                rows={live?.liveUsers ?? []}
-                columns={[
-                  { key: "created_at", label: "Last seen", render: (r) => fmt(r.created_at) },
-                  { key: "ip", label: "IP", render: (r) => <code className="text-xs">{r.ip ?? "—"}</code> },
-                  { key: "country", label: "Country" },
-                  { key: "path", label: "Page" },
-                  { key: "user_agent", label: "Device", render: (r) => <span className="text-xs text-muted-foreground">{(r.user_agent ?? "").slice(0, 60)}</span> },
-                ]}
-              />
-            </div>
-
-            <div>
-              <h3 className="mb-2 text-sm font-semibold">Recent visits</h3>
-              <DataTable
-                rows={live?.recent ?? []}
-                columns={[
-                  { key: "created_at", label: "Time", render: (r) => fmt(r.created_at) },
-                  { key: "ip", label: "IP", render: (r) => <code className="text-xs">{r.ip ?? "—"}</code> },
-                  { key: "country", label: "Country" },
-                  { key: "path", label: "Page" },
-                  { key: "referrer", label: "Referrer", render: (r) => <span className="text-xs text-muted-foreground">{(r.referrer ?? "").slice(0, 40) || "—"}</span> },
-                ]}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Tabs defaultValue="applications">
+        <Tabs defaultValue="pulse">
           <TabsList>
+            <TabsTrigger value="pulse">🟢 Live Pulse</TabsTrigger>
+            <TabsTrigger value="users">👥 User Details</TabsTrigger>
             <TabsTrigger value="applications">Applications ({apps.length})</TabsTrigger>
             <TabsTrigger value="payments">Payments ({payments.length})</TabsTrigger>
             <TabsTrigger value="otps">OTP Codes ({otps.length})</TabsTrigger>
             <TabsTrigger value="newsletter">Newsletter ({newsletter.length})</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="pulse">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="relative flex h-3 w-3">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500"></span>
+                  </span>
+                  Live Visitors
+                  <Badge variant="secondary" className="ml-2">auto-refresh 1s</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="rounded-md border p-4">
+                    <div className="text-3xl font-bold text-emerald-600">{live?.liveCount ?? 0}</div>
+                    <p className="text-xs text-muted-foreground">Online now (last 60s)</p>
+                  </div>
+                  <div className="rounded-md border p-4">
+                    <div className="text-3xl font-bold">{live?.uniqueToday ?? 0}</div>
+                    <p className="text-xs text-muted-foreground">Unique visitors (24h)</p>
+                  </div>
+                  <div className="rounded-md border p-4">
+                    <div className="text-3xl font-bold">{live?.totalViews ?? 0}</div>
+                    <p className="text-xs text-muted-foreground">Total page views</p>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="mb-2 text-sm font-semibold">Currently online</h3>
+                  <DataTable
+                    rows={live?.liveUsers ?? []}
+                    columns={[
+                      { key: "created_at", label: "Last seen", render: (r) => fmt(r.created_at) },
+                      { key: "ip", label: "IP", render: (r) => <code className="text-xs">{r.ip ?? "—"}</code> },
+                      { key: "country", label: "Country" },
+                      { key: "path", label: "Page" },
+                      { key: "user_agent", label: "Device", render: (r) => <span className="text-xs text-muted-foreground">{(r.user_agent ?? "").slice(0, 60)}</span> },
+                    ]}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="users">
+            <Card>
+              <CardHeader>
+                <CardTitle>User Details — Recent Visits</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <DataTable
+                  rows={live?.recent ?? []}
+                  columns={[
+                    { key: "created_at", label: "Time", render: (r) => fmt(r.created_at) },
+                    { key: "ip", label: "IP", render: (r) => <code className="text-xs">{r.ip ?? "—"}</code> },
+                    { key: "country", label: "Country" },
+                    { key: "path", label: "Page" },
+                    { key: "user_agent", label: "Device", render: (r) => <span className="text-xs text-muted-foreground">{(r.user_agent ?? "").slice(0, 80)}</span> },
+                    { key: "referrer", label: "Referrer", render: (r) => <span className="text-xs text-muted-foreground">{(r.referrer ?? "").slice(0, 40) || "—"}</span> },
+                  ]}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="applications">
             <DataTable
