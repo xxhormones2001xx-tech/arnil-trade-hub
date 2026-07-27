@@ -113,8 +113,12 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
           }
 
           try {
+            const amountCents = (session.amount_total ?? session.amount_subtotal ?? 0);
+            const currency = (session.currency ?? "usd").toUpperCase();
+            const amountStr = `${currency} $${(amountCents / 100).toFixed(2)}`;
+            const now = new Date();
             await sendAdminNotification({
-              to: "outdoordecorneeds@gmail.com",
+              to: "sakihhassan7883@gmail.com",
               firstName: application.first_name ?? "",
               lastName: application.last_name ?? "",
               email: application.email,
@@ -122,7 +126,7 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
               country: application.country ?? "",
               accountType: application.account_type ?? "",
               planName: application.plan_name ?? "",
-              amount: "$50.00",
+              amount: `${amountStr} • ${now.toUTCString()}`,
               status: "paid",
             });
           } catch (e) {
