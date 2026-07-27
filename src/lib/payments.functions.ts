@@ -110,8 +110,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         {
           application_id: application.id,
           email: data.email.toLowerCase(),
-          amount: data.amount,
-          currency: data.currency,
+          amount,
+          currency,
           status: "pending",
         },
         { onConflict: "application_id" }
