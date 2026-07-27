@@ -67,6 +67,7 @@ function DataTable({ columns, rows }: { columns: { key: string; label: string; r
 function AdminPage() {
   const login = useServerFn(adminLogin);
   const fetchData = useServerFn(adminGetData);
+  const fetchLive = useServerFn(adminGetLiveStats);
   const [password, setPassword] = useState(() =>
     typeof window !== "undefined" ? sessionStorage.getItem("admin_pw") ?? "" : ""
   );
@@ -74,6 +75,21 @@ function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<{ applications: Row[]; payments: Row[]; otps: Row[]; newsletter: Row[] } | null>(null);
+  const [live, setLive] = useState<{ liveCount: number; liveUsers: Row[]; uniqueToday: number; totalViews: number; recent: Row[] } | null>(null);
+
+  useEffect(() => {
+    if (!authed || !password) return;
+    let cancelled = false;
+    const tick = async () => {
+      try {
+        const res = await fetchLive({ data: { password } });
+        if (!cancelled) setLive(res);
+      } catch {}
+    };
+    tick();
+    const id = setInterval(tick, 5000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [authed, password, fetchLive]);
 
   async function refresh(pw: string) {
     setLoading(true);
