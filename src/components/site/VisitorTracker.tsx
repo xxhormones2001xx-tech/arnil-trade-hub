@@ -8,9 +8,9 @@ function getSessionId(): string {
       id =
         (crypto as any)?.randomUUID?.() ||
         Math.random().toString(36).slice(2) + Date.now().toString(36);
-      sessionStorage.setItem(key, id);
+      sessionStorage.setItem(key, id as string);
     }
-    return id;
+    return id as string;
   } catch {
     return "anon-" + Math.random().toString(36).slice(2);
   }
