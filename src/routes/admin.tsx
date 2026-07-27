@@ -183,7 +183,7 @@ function AdminPage() {
         </div>
 
         <Tabs defaultValue="pulse">
-          <TabsList>
+          <TabsList className="flex flex-wrap h-auto w-full justify-start gap-1">
             <TabsTrigger value="pulse">🟢 Live Pulse</TabsTrigger>
             <TabsTrigger value="users">👥 User Details</TabsTrigger>
             <TabsTrigger value="applications">Applications ({apps.length})</TabsTrigger>
